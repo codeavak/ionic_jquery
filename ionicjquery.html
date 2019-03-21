@@ -4,7 +4,6 @@
 <head>
     <title>Ionic JQuery</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link href="https://unpkg.com/@ionic/core@latest/css/ionic.bundle.css" rel="stylesheet">
 
 </head>
@@ -22,7 +21,11 @@
             (ionScrollEnd)="logScrollEnd()">
             <ion-card>
                 <ion-card-header>
-                    <ion-card-title>Expense<ion-card-title>
+                        <ion-row>
+                                <ion-col size-md="6" offset-md="3">
+                    <ion-card-title>Expense Calculator<ion-card-title>
+                        </ion-col>
+                        </ion-row>
                 </ion-card-header>
                 <ion-card-content>
                     <ion-row>
@@ -47,8 +50,13 @@
                                 </ion-button>
                             </div>
                         </ion-col>
+                        <ion-col  size-md="6" offset-md="3" id="theList" margin></ion-col>
+                        <ion-col  size-md="6" offset-md="3" margin>
+                        <ion-item color="primary" >The total is: $<span id="theTotal"></span></ion-item>
+                    </ion-col>
                     </ion-row>
-                    <div id="theList"></div>
+                    
+                    
                 </ion-card-content>
             </ion-card>
         </ion-content>
@@ -57,12 +65,14 @@
     <script src="https://unpkg.com/@ionic/core@latest/dist/ionic.js"></script>
     <script>
         $(document).ready(function () {
-            console.log('jquery is ready!');
             var expenses = [{ reason: 'food', amount: 10 }, { reason: 'gas', amount: 20 }, { reason: 'concert', amount: 100 }]
             $('#submit').click(function () {
                 console.log('submit was clicked!');
                 if ($('#amount').val() != '' && $('#reason').val() != '') {
                     $('<ion-item />').html("<ion-label>Paid $" + $('#amount').val() + " for " + $('#reason').val() + "</ion-label>").appendTo(list);
+                    
+                    var sum=+$('#theTotal').text()+(+$('#amount').val());
+                    $('#theTotal').text(sum);
                     $('#amount').val("");
                     $('#reason').val("");
                 }
@@ -76,6 +86,11 @@
             var list = $("#theList"); // get the list with jquery
             extractResult(expenses);   // run function and fill the list with ion-items
 
+            var sum=0;
+            $.each(expenses, function (index, value) {
+                sum+=value.amount;}) 
+            var total = $("#theTotal");
+            total.text(sum);
 
             function extractResult(result) {
                 $.each(result, function (index, value) {
